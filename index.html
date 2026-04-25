@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xoleric AI - Self-Improving Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Animated Background -->
+        <div class="bg-animation">
+            <div class="bg-gradient"></div>
+            <div class="bg-grid"></div>
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">Xoleric AI</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-item active" onclick="switchView('generate')">
+                    <span>💫</span>
+                    <span>Generate</span>
+                </div>
+                <div class="menu-item" onclick="switchView('projects')">
+                    <span>📁</span>
+                    <span>Projects</span>
+                </div>
+                <div class="menu-item" onclick="switchView('ai')">
+                    <span>🤖</span>
+                    <span>AI Chat</span>
+                </div>
+                <div class="menu-item" onclick="switchView('settings')">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="ai-status">
+                    <span class="status-dot" id="aiStatusDot"></span>
+                    <span id="aiStatusText">Checking AI...</span>
+                </div>
+                <span class="version">v3.0</span>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                    <h1>Xoleric AI Builder</h1>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" title="GitHub" onclick="openGitHub()">GitHub</button>
+                    <button class="header-btn primary" onclick="deploy()">
+                        <span>🚀</span> Deploy
+                    </button>
+                </div>
+            </header>
+
+            <!-- Generate View -->
+            <section class="view" id="view-generate">
+                <!-- Hero -->
+                <div class="hero">
+                    <div class="hero-badge">
+                        <span class="pulse"></span>
+                        <span id="aiModeBadge">AI Ready</span>
+                    </div>
+                    <h2 class="hero-title">
+                        Build with<br>
+                        <span class="gradient">Xoleric AI</span>
+                    </h2>
+                    <p class="hero-subtitle">Describe your dream website, let AI build it</p>
+
+                    <!-- Input -->
+                    <div class="input-box">
+                        <div class="input-icon">💭</div>
+                        <textarea 
+                            class="prompt-input" 
+                            id="promptInput"
+                            placeholder="Describe your website...&#10;Example: A modern SaaS landing page with dark theme, gradient buttons, animated hero section, and glowing effects"
+                            rows="3"
+                        ></textarea>
+                        <div class="input-actions">
+                            <div class="input-options">
+                                <button class="option-btn" onclick="addOption('dark')" title="Dark">🌙</button>
+                                <button class="option-btn" onclick="addOption('animated')" title="Anim">✨</button>
+                                <button class="option-btn" onclick="addOption('modern')" title="Modern">🎨</button>
+                                <button class="option-btn" onclick="addOption('saas')" title="SaaS">🚀</button>
+                                <button class="option-btn" onclick="addOption('shop')" title="Shop">🛒</button>
+                                <button class="option-btn" onclick="addOption('blog')" title="Blog">📝</button>
+                            </div>
+                            <button class="generate-btn" onclick="generate()">
+                                <span>Generate</span>
+                                <span class="arrow">→</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="loading-content">
+                        <div class="loading-orb">
+                            <div class="orb"></div>
+                            <div class="orb-ring"></div>
+                        </div>
+                        <div class="loading-text" id="loadingText">AI is thinking...</div>
+                        <div class="loading-steps">
+                            <div class="step" id="step1">Analyzing</div>
+                            <div class="step" id="step2">Generating</div>
+                            <div class="step" id="step3">Styling</div>
+                            <div class="step" id="step4">Finalizing</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <section class="result" id="result">
+                    <div class="result-tabs">
+                        <button class="tab active" data-tab="preview" onclick="switchTab('preview')">👁️ Preview</button>
+                        <button class="tab" data-tab="code" onclick="switchTab('code')">📄 Code</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <div class="tab-panel active" id="preview-panel">
+                            <iframe id="preview" sandbox="allow-scripts"></iframe>
+                        </div>
+                        <div class="tab-panel" id="code-panel">
+                            <div class="code-header">
+                                <span class="code-filename">index.html</span>
+                                <div class="code-actions">
+                                    <button onclick="copyCode()">📋 Copy</button>
+                                    <button onclick="downloadCode()">💾 Save</button>
+                                </div>
+                            </div>
+                            <pre class="code-view" id="codeView"></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actions -->
+                <section class="actions" id="actions">
+                    <button class="action-btn" onclick="downloadCode()">
+                        <span>📥</span> Download
+                    </button>
+                    <button class="action-btn" onclick="copyCode()">
+                        <span>📋</span> Copy
+                    </button>
+                    <button class="action-btn primary" onclick="deploy()">
+                        <span>🚀</span> Deploy to GitHub
+                    </button>
+                </section>
+            </section>
+
+            <!-- Projects View -->
+            <section class="view" id="view-projects">
+                <h2>Your Projects</h2>
+                <div class="projects-grid" id="projectsGrid">
+                    <div class="project-card" onclick="loadProject()">
+                        <div class="project-preview"></div>
+                        <div class="project-info">
+                            <h3>Landing Page</h3>
+                            <p>Generated 2 hours ago</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section class="view" id="view-settings">
+                <h2>Settings</h2>
+                <div class="settings-section">
+                    <h3>AI Configuration</h3>
+                    <div class="setting-item">
+                        <label>Ollama URL</label>
+                        <input type="text" id="ollamaUrl" value="http://localhost:11434" placeholder="http://localhost:11434">
+                    </div>
+                    <div class="setting-item">
+                        <label>AI Model</label>
+                        <select id="aiModel">
+                            <option value="codellama">Codellama</option>
+                            <option value="llama2">Llama2</option>
+                            <option value="mistral">Mistral</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="testAI()">Test Connection</button>
+                </div>
+                <div class="settings-section">
+                    <h3>GitHub</h3>
+                    <div class="setting-item">
+                        <label>Repo Name</label>
+                        <input type="text" id="repoName" value="my-website" placeholder="my-website">
+                    </div>
+                    <button class="btn primary" onclick="saveSettings()">Save Settings</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
